@@ -1,0 +1,138 @@
+/* ==========================================================================
+   SkillSwap - Animations & Transitions
+   Smooth CSS Keyframes, Scroll Reveals, Glows, and Accessibility Overrides
+   Developer: Sanjeeviraj
+   ========================================================================== */
+
+/* Keyframe Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes floatGlow {
+  0%, 100% {
+    transform: translateY(0);
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.25);
+  }
+  50% {
+    transform: translateY(-6px);
+    box-shadow: 0 0 35px rgba(34, 211, 238, 0.35);
+  }
+}
+
+@keyframes pulseBorder {
+  0%, 100% {
+    border-color: rgba(139, 92, 246, 0.3);
+  }
+  50% {
+    border-color: rgba(34, 211, 238, 0.6);
+  }
+}
+
+@keyframes skeletonPulse {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+@keyframes toastSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Page Level Entrance */
+.page-fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+/* Scroll-triggered reveal classes */
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(25px);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.reveal-on-scroll.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Stagger delay helpers */
+.delay-1 { transition-delay: 0.1s; }
+.delay-2 { transition-delay: 0.2s; }
+.delay-3 { transition-delay: 0.3s; }
+.delay-4 { transition-delay: 0.4s; }
+
+/* Interactive Hover Lift & Glow */
+.hover-lift {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(139, 92, 246, 0.2);
+}
+
+.glow-pill {
+  animation: floatGlow 4s infinite ease-in-out;
+}
+
+.spin-icon {
+  animation: spin 1s linear infinite;
+}
+
+/* Reduced Motion Override for Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  .reveal-on-scroll {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .glow-pill {
+    animation: none !important;
+  }
+}

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Skill Exchange Requests – SkillSwap</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <style>
+    .request-item-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      transition: all 0.25s ease;
+    }
+    .request-item-card:hover {
+      border-color: var(--secondary-cyan);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+    }
+    .exchange-deal-box {
+      background: rgba(10, 12, 20, 0.7);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 1rem 1.25rem;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 1.5rem;
+      text-align: center;
+    }
+    .deal-col h5 {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+    .deal-icon {
+      font-size: 1.5rem;
+      color: var(--secondary-cyan);
+    }
+    @media (max-width: 600px) {
+      .exchange-deal-box {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+      }
+      .deal-icon { transform: rotate(90deg); margin: 0.25rem 0; }
+    }
+  </style>
+</head>
+<body class="page-fade-in">
+  <!-- Dynamic Mount Point for Navbar -->
+  <div id="navbar-mount"></div>
+
+  <main class="container">
+    <div class="reveal-on-scroll mb-3">
+      <span class="badge badge-violet mb-1"><i class="fas fa-exchange-alt"></i> Collaborative Trading</span>
+      <h1>Skill Exchange Proposals</h1>
+      <p>Review incoming invitations from peers or track the status of outgoing requests.</p>
+    </div>
+
+    <!-- Tab navigation -->
+    <div class="tabs-container reveal-on-scroll delay-1">
+      <button class="tab-btn active" id="tab-incoming-btn" onclick="switchRequestTab('incoming')">
+        <i class="fas fa-inbox"></i> Incoming Requests (<span id="incoming-count-badge">0</span>)
+      </button>
+      <button class="tab-btn" id="tab-outgoing-btn" onclick="switchRequestTab('outgoing')">
+        <i class="fas fa-paper-plane"></i> Outgoing Sent (<span id="outgoing-count-badge">0</span>)
+      </button>
+    </div>
+
+    <!-- Requests Container -->
+    <div id="requests-list-container">
+      <div class="skeleton" style="height: 180px; margin-bottom: 1rem;"></div>
+      <div class="skeleton" style="height: 180px;"></div>
+    </div>
+  </main>
+
+  <!-- Accept Request Response Modal -->
+  <div class="modal-backdrop" id="accept-modal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3><i class="fas fa-check-circle text-success"></i> Accept Skill Exchange</h3>
+        <button class="modal-close" onclick="closeModal('accept-modal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="accept-form">
+          <input type="hidden" id="accept-req-id">
+          <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1.25rem;">
+            Accepting this proposal will confirm mutual learning. You and your partner will then be able to schedule collaborative sessions.
+          </p>
+          <div class="form-group">
+            <label class="form-label" for="accept-response-msg">Optional Message to Partner</label>
+            <textarea id="accept-response-msg" class="form-control" rows="3" placeholder="e.g. Delighted to collaborate! Let's connect on Tuesdays."></textarea>
+          </div>
+          <div class="modal-footer" style="padding: 0; margin-top: 1.5rem;">
+            <button type="button" class="btn btn-secondary" onclick="closeModal('accept-modal')">Cancel</button>
+            <button type="submit" class="btn btn-success"><i class="fas fa-handshake"></i> Confirm Acceptance</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer Mount -->
+  <div id="footer-mount"></div>
+
+  <!-- Scripts -->
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/navbar.js"></script>
+  <script src="js/requests.js"></script>
+</body>
+</html>

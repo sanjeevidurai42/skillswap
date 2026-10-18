@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Profile – SkillSwap</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <style>
+    .profile-hero {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 2.5rem 2rem;
+      margin-bottom: 2rem;
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .profile-avatar-wrapper {
+      position: relative;
+    }
+    .profile-avatar-img {
+      width: 100px;
+      height: 100px;
+      border-radius: var(--radius-full);
+      border: 3px solid var(--primary-violet);
+      object-fit: cover;
+      box-shadow: 0 0 25px var(--primary-violet-glow);
+    }
+    .profile-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 2rem;
+    }
+    .skill-manager-item {
+      background: rgba(15, 18, 29, 0.7);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 1rem;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .review-item-card {
+      background: rgba(15, 18, 29, 0.75);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      margin-bottom: 1rem;
+    }
+    @media (max-width: 900px) {
+      .profile-grid { grid-template-columns: 1fr; }
+      .profile-hero { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body class="page-fade-in">
+  <!-- Dynamic Mount Point for Navbar -->
+  <div id="navbar-mount"></div>
+
+  <main class="container">
+    <!-- Profile Hero Card -->
+    <div class="profile-hero reveal-on-scroll">
+      <div class="profile-avatar-wrapper">
+        <img src="" id="prof-hero-avatar" class="profile-avatar-img" alt="Avatar">
+      </div>
+      <div style="flex: 1;">
+        <div class="flex items-center gap-2" style="flex-wrap: wrap;">
+          <h1 style="font-size: 2rem;" id="prof-hero-name">Loading...</h1>
+          <span class="badge badge-violet" id="prof-hero-format"><i class="fas fa-laptop"></i> Online</span>
+          <span class="match-score-badge"><i class="fas fa-trophy"></i> <span id="prof-hero-points">100</span> Skill Points</span>
+        </div>
+        <p id="prof-hero-headline" style="color: var(--secondary-cyan); font-weight: 500; margin-top: 4px;"></p>
+        <p id="prof-hero-location" style="font-size: 0.875rem; color: var(--text-muted); margin-top: 2px;">
+          <i class="fas fa-map-marker-alt"></i> <span id="prof-hero-loc-text">Campus</span>
+        </p>
+      </div>
+      <div>
+        <button onclick="document.getElementById('profile-edit-section').scrollIntoView({ behavior: 'smooth' })" class="btn btn-primary">
+          <i class="fas fa-edit"></i> Edit Profile & Skills
+        </button>
+      </div>
+    </div>
+
+    <!-- Main Grid: Edit Form (Left) & Feedback/Reviews (Right) -->
+    <div class="profile-grid">
+      <!-- Edit Profile Details & Skills -->
+      <div class="glass-card reveal-on-scroll delay-1" id="profile-edit-section">
+        <div class="widget-header">
+          <h3><i class="fas fa-user-cog text-cyan"></i> Profile & Preferences</h3>
+          <span style="font-size: 0.8rem; color: var(--text-muted);">Saved automatically to MongoDB</span>
+        </div>
+
+        <form id="profile-update-form">
+          <div class="form-group">
+            <label class="form-label" for="prof-name">Full Name</label>
+            <input type="text" id="prof-name" class="form-control" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="prof-avatar">Avatar Image URL</label>
+            <input type="url" id="prof-avatar" class="form-control" placeholder="https://images.unsplash.com/...">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="prof-headline">Headline</label>
+            <input type="text" id="prof-headline" class="form-control" placeholder="e.g. Full-Stack Developer & Python Enthusiast">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="prof-bio">Biography & Academic Background</label>
+            <textarea id="prof-bio" class="form-control" rows="3" placeholder="Tell potential learning partners about your projects, strengths, and study goals..."></textarea>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div class="form-group">
+              <label class="form-label" for="prof-format">Preferred Format</label>
+              <select id="prof-format" class="form-control">
+                <option value="online">Online Sessions</option>
+                <option value="in-person">In-Person on Campus</option>
+                <option value="both">Both / Flexible</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="prof-location">Location / Campus Building</label>
+              <input type="text" id="prof-location" class="form-control" placeholder="e.g. Science Library / Remote">
+            </div>
+          </div>
+
+          <!-- Skills I Can Teach -->
+          <div style="margin-top: 1.5rem; border-top: 1px solid var(--border-subtle); padding-top: 1.25rem;">
+            <div class="flex justify-between items-center mb-2">
+              <h4 style="color: var(--secondary-cyan); font-size: 1.05rem;"><i class="fas fa-chalkboard-teacher"></i> Skills I Can Teach</h4>
+              <button type="button" onclick="openAddSkillModal('teach')" class="btn btn-sm btn-outline-violet">
+                <i class="fas fa-plus"></i> Add Skill
+              </button>
+            </div>
+            <div id="teach-skills-list"></div>
+          </div>
+
+          <!-- Skills I Want to Learn -->
+          <div style="margin-top: 1.5rem; border-top: 1px solid var(--border-subtle); padding-top: 1.25rem;">
+            <div class="flex justify-between items-center mb-2">
+              <h4 style="color: var(--primary-violet); font-size: 1.05rem;"><i class="fas fa-book-reader"></i> Skills I Want to Learn</h4>
+              <button type="button" onclick="openAddSkillModal('learn')" class="btn btn-sm btn-secondary">
+                <i class="fas fa-plus"></i> Add Goal
+              </button>
+            </div>
+            <div id="learn-skills-list"></div>
+          </div>
+
+          <button type="submit" class="btn btn-primary w-full mt-4" id="save-profile-btn">
+            <i class="fas fa-save"></i> Save Profile Changes
+          </button>
+        </form>
+      </div>
+
+      <!-- Right Column: Learning History & Feedback -->
+      <div>
+        <div class="glass-card reveal-on-scroll delay-2">
+          <div class="widget-header">
+            <h3><i class="fas fa-award text-violet"></i> Peer Reviews & Ratings</h3>
+            <span class="badge badge-cyan" id="prof-reviews-count">0 Reviews</span>
+          </div>
+          <div id="prof-feedback-list">
+            <p style="font-size: 0.85rem; color: var(--text-muted); text-align: center; padding: 1.5rem;">
+              No reviews received yet. Complete learning sessions to earn ratings and skill points!
+            </p>
+          </div>
+        </div>
+
+        <div class="glass-card reveal-on-scroll delay-3 mt-3">
+          <div class="widget-header">
+            <h3><i class="fas fa-history text-cyan"></i> Learning History</h3>
+          </div>
+          <div id="prof-history-stats" style="font-size: 0.9rem; color: var(--text-secondary);">
+            <div class="flex justify-between py-1" style="border-bottom: 1px solid var(--border-subtle);">
+              <span>Completed Sessions:</span>
+              <strong style="color: #fff;" id="hist-completed">0</strong>
+            </div>
+            <div class="flex justify-between py-1" style="border-bottom: 1px solid var(--border-subtle);">
+              <span>Total Points Earned:</span>
+              <strong style="color: var(--secondary-cyan);" id="hist-points">100</strong>
+            </div>
+            <div class="flex justify-between py-1">
+              <span>Platform Standing:</span>
+              <span class="badge badge-success">Verified Student Peer</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Add Skill Modal Dialog -->
+  <div class="modal-backdrop" id="add-skill-modal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 id="modal-skill-title">Add Skill</h3>
+        <button class="modal-close" onclick="closeModal('add-skill-modal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="add-skill-form">
+          <input type="hidden" id="skill-type-flag" value="teach">
+          <div class="form-group">
+            <label class="form-label" for="modal-skill-name">Skill Name</label>
+            <input type="text" id="modal-skill-name" class="form-control" placeholder="e.g. Python, UI/UX, Docker, React" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="modal-skill-category">Category</label>
+            <select id="modal-skill-category" class="form-control">
+              <option value="Programming & Systems">Programming & Systems</option>
+              <option value="Web & App Development">Web & App Development</option>
+              <option value="Data Science & AI">Data Science & AI</option>
+              <option value="UI/UX & Design">UI/UX & Design</option>
+              <option value="Languages & Communication">Languages & Communication</option>
+              <option value="Mathematics & Science">Mathematics & Science</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="modal-skill-level">Proficiency Level</label>
+            <select id="modal-skill-level" class="form-control">
+              <option value="beginner">Beginner</option>
+              <option value="intermediate" selected>Intermediate</option>
+              <option value="advanced">Advanced</option>
+              <option value="expert">Expert</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="modal-skill-desc" id="modal-skill-desc-label">Description / Topics</label>
+            <textarea id="modal-skill-desc" class="form-control" rows="2" placeholder="Describe topics you are comfortable teaching or your learning goals..."></textarea>
+          </div>
+          <div class="modal-footer" style="padding: 0; margin-top: 1.5rem;">
+            <button type="button" class="btn btn-secondary" onclick="closeModal('add-skill-modal')">Cancel</button>
+            <button type="submit" class="btn btn-primary"><i class="fas fa-check"></i> Add to Profile</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer Mount -->
+  <div id="footer-mount"></div>
+
+  <!-- Scripts -->
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/navbar.js"></script>
+  <script src="js/profile.js"></script>
+</body>
+</html>

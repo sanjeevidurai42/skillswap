@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Learning Sessions – SkillSwap</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <style>
+    .session-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      transition: all 0.25s ease;
+    }
+    .session-card:hover {
+      border-color: var(--secondary-cyan);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+    }
+    .session-time-banner {
+      background: rgba(10, 12, 20, 0.7);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 0.85rem 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+  </style>
+</head>
+<body class="page-fade-in">
+  <!-- Dynamic Mount Point for Navbar -->
+  <div id="navbar-mount"></div>
+
+  <main class="container">
+    <div class="flex items-center justify-between reveal-on-scroll mb-3" style="flex-wrap: wrap; gap: 1rem;">
+      <div>
+        <span class="badge badge-cyan mb-1"><i class="fas fa-calendar-alt"></i> Collaborative Calendar</span>
+        <h1>Collaborative Learning Sessions</h1>
+        <p>Coordinate one-on-one study rooms, mark milestones complete, and earn skill points.</p>
+      </div>
+      <button onclick="openScheduleModal()" class="btn btn-primary">
+        <i class="fas fa-plus-circle"></i> Schedule New Session
+      </button>
+    </div>
+
+    <!-- Tabs Container -->
+    <div class="tabs-container reveal-on-scroll delay-1">
+      <button class="tab-btn active" id="tab-upcoming-btn" onclick="switchSessionTab('upcoming')">
+        <i class="fas fa-clock"></i> Upcoming Scheduled (<span id="upcoming-count-badge">0</span>)
+      </button>
+      <button class="tab-btn" id="tab-past-btn" onclick="switchSessionTab('past')">
+        <i class="fas fa-history"></i> Completed Sessions (<span id="past-count-badge">0</span>)
+      </button>
+    </div>
+
+    <!-- Sessions List -->
+    <div id="sessions-container">
+      <div class="skeleton" style="height: 180px; margin-bottom: 1rem;"></div>
+      <div class="skeleton" style="height: 180px;"></div>
+    </div>
+  </main>
+
+  <!-- Schedule Session Modal -->
+  <div class="modal-backdrop" id="schedule-session-modal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3><i class="fas fa-calendar-plus text-cyan"></i> Schedule Collaborative Session</h3>
+        <button class="modal-close" onclick="closeModal('schedule-session-modal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="schedule-session-form">
+          <div class="form-group">
+            <label class="form-label" for="sess-partner-select">Learning Partner</label>
+            <select id="sess-partner-select" class="form-control" required></select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="sess-topic-input">Session Topic / Objective</label>
+            <input type="text" id="sess-topic-input" class="form-control" placeholder="e.g. Scikit-Learn TF-IDF Text Vectorization & Cosine Math" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="sess-skill-input">Primary Skill Domain</label>
+            <input type="text" id="sess-skill-input" class="form-control" placeholder="e.g. Machine Learning & Scikit-Learn" required>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1.3fr 0.7fr; gap: 1rem;">
+            <div class="form-group">
+              <label class="form-label" for="sess-date-input">Date & Time</label>
+              <input type="datetime-local" id="sess-date-input" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="sess-duration-select">Duration</label>
+              <select id="sess-duration-select" class="form-control">
+                <option value="30">30 Mins</option>
+                <option value="45">45 Mins</option>
+                <option value="60" selected>60 Mins</option>
+                <option value="90">90 Mins</option>
+                <option value="120">120 Mins</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div class="form-group">
+              <label class="form-label" for="sess-format-select">Format</label>
+              <select id="sess-format-select" class="form-control">
+                <option value="online">Online Collaboration</option>
+                <option value="in-person">In-Person Campus Lab</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="sess-room-input">Room / Location</label>
+              <input type="text" id="sess-room-input" class="form-control" value="SkillSwap Interactive Room #204">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="sess-notes-input">Session Preparation Notes</label>
+            <textarea id="sess-notes-input" class="form-control" rows="2" placeholder="Pre-reading links, repository setup notes, or discussion points..."></textarea>
+          </div>
+
+          <div class="modal-footer" style="padding: 0; margin-top: 1.5rem;">
+            <button type="button" class="btn btn-secondary" onclick="closeModal('schedule-session-modal')">Cancel</button>
+            <button type="submit" class="btn btn-primary"><i class="fas fa-calendar-check"></i> Confirm Schedule</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Complete Session Modal -->
+  <div class="modal-backdrop" id="complete-modal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3><i class="fas fa-check-double text-success"></i> Mark Session Complete</h3>
+        <button class="modal-close" onclick="closeModal('complete-modal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="complete-form">
+          <input type="hidden" id="complete-sess-id">
+          <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1rem;">
+            Marking this session completed awards participation points and enables you and your partner to submit peer feedback.
+          </p>
+          <div class="form-group">
+            <label class="form-label" for="complete-summary-input">Session Summary / Key Learnings</label>
+            <textarea id="complete-summary-input" class="form-control" rows="3" placeholder="Summarize concepts mastered, code built, or next steps..."></textarea>
+          </div>
+          <div class="modal-footer" style="padding: 0; margin-top: 1.5rem;">
+            <button type="button" class="btn btn-secondary" onclick="closeModal('complete-modal')">Cancel</button>
+            <button type="submit" class="btn btn-success"><i class="fas fa-check"></i> Mark Completed & Review</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer Mount -->
+  <div id="footer-mount"></div>
+
+  <!-- Scripts -->
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/navbar.js"></script>
+  <script src="js/sessions.js"></script>
+</body>
+</html>

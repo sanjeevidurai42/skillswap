@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In & Register – SkillSwap</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <style>
+    .auth-wrapper {
+      min-height: calc(100vh - 4.5rem - 180px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 1.5rem;
+    }
+    .auth-card {
+      width: 100%;
+      max-width: 480px;
+      background: rgba(18, 22, 36, 0.85);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 2.5rem 2rem;
+      box-shadow: var(--shadow-lg), 0 0 35px rgba(139, 92, 246, 0.15);
+      backdrop-filter: blur(16px);
+      position: relative;
+    }
+    .auth-tabs {
+      display: flex;
+      background: rgba(10, 12, 20, 0.7);
+      border-radius: var(--radius-md);
+      padding: 0.35rem;
+      margin-bottom: 2rem;
+      border: 1px solid var(--border-subtle);
+    }
+    .auth-tab {
+      flex: 1;
+      padding: 0.65rem;
+      text-align: center;
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      font-weight: 600;
+      font-size: 0.95rem;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .auth-tab.active {
+      background: var(--bg-tertiary);
+      color: var(--text-primary);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--border-color);
+    }
+    .input-wrapper {
+      position: relative;
+    }
+    .password-toggle-btn {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 1rem;
+      padding: 4px;
+      transition: color 0.2s ease;
+    }
+    .password-toggle-btn:hover {
+      color: var(--secondary-cyan);
+    }
+    .oauth-divider {
+      display: flex;
+      align-items: center;
+      margin: 1.75rem 0;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+    .oauth-divider::before, .oauth-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border-subtle);
+    }
+    .oauth-divider span {
+      padding: 0 1rem;
+    }
+    .oauth-btn-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+    .oauth-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.7rem;
+      background: rgba(22, 27, 43, 0.8);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      color: var(--text-primary);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+    .oauth-btn:hover {
+      border-color: var(--secondary-cyan);
+      box-shadow: 0 0 12px var(--secondary-cyan-glow);
+      color: #fff;
+      transform: translateY(-2px);
+    }
+    .demo-callout {
+      background: rgba(139, 92, 246, 0.1);
+      border: 1px dashed rgba(139, 92, 246, 0.4);
+      border-radius: var(--radius-md);
+      padding: 1rem;
+      margin-top: 1.5rem;
+      text-align: center;
+    }
+    .demo-btn-group {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 0.75rem;
+    }
+    .error-banner {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      border-radius: var(--radius-sm);
+      color: #fca5a5;
+      padding: 0.75rem;
+      font-size: 0.875rem;
+      margin-bottom: 1.25rem;
+      display: none;
+    }
+  </style>
+</head>
+<body class="page-fade-in">
+  <!-- Dynamic Mount Point for Navbar -->
+  <div id="navbar-mount"></div>
+
+  <main class="auth-wrapper">
+    <div class="auth-card">
+      <div class="text-center mb-3">
+        <div class="brand-icon" style="margin: 0 auto 0.75rem auto; width: 2.8rem; height: 2.8rem; font-size: 1.4rem;">
+          <i class="fas fa-sync-alt"></i>
+        </div>
+        <h2 id="auth-heading">Welcome Back</h2>
+        <p id="auth-subheading" style="font-size: 0.925rem; margin-top: 4px;">Log in to access your SkillSwap learning dashboard</p>
+      </div>
+
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tab-login" onclick="switchAuthTab('login')">Log In</button>
+        <button class="auth-tab" id="tab-register" onclick="switchAuthTab('register')">Create Account</button>
+      </div>
+
+      <div id="auth-error" class="error-banner"></div>
+
+      <!-- OAuth Social Sign-In (Official flows & Lab Demo Handler) -->
+      <div class="oauth-btn-grid">
+        <a href="/api/auth/google" class="oauth-btn" title="Sign in with Google OAuth 2.0">
+          <i class="fab fa-google text-cyan"></i> Google
+        </a>
+        <a href="/api/auth/github" class="oauth-btn" title="Sign in with GitHub OAuth">
+          <i class="fab fa-github text-violet"></i> GitHub
+        </a>
+        <a href="/api/auth/linkedin" class="oauth-btn" title="Sign in with LinkedIn OAuth 2.0">
+          <i class="fab fa-linkedin-in text-cyan"></i> LinkedIn
+        </a>
+      </div>
+
+      <div class="oauth-divider">
+        <span>OR CONTINUE WITH EMAIL</span>
+      </div>
+
+      <!-- Secure Connection Indicator & Quick Demo Autofill -->
+      <div style="background: rgba(34, 211, 238, 0.08); border: 1px solid rgba(34, 211, 238, 0.3); border-radius: var(--radius-md); padding: 0.75rem 1rem; margin-bottom: 1.25rem;">
+        <div class="flex items-center justify-between mb-1">
+          <span style="font-size: 0.75rem; color: var(--secondary-cyan); font-weight: 700;">
+            <i class="fas fa-shield-alt"></i> 256-Bit Encrypted Session
+          </span>
+          <button type="button" onclick="autoFillCredentials('sanjeeviraj@skillswap.edu', 'Password123!')" class="btn btn-sm btn-outline-violet" style="padding: 0.2rem 0.6rem; font-size: 0.75rem;">
+            <i class="fas fa-magic"></i> Auto-Fill Demo
+          </button>
+        </div>
+        <p style="font-size: 0.78rem; color: var(--text-secondary); margin: 0;">
+          Email: <code style="color: #fff;">sanjeeviraj@skillswap.edu</code> &bull; Pass: <code style="color: var(--secondary-cyan);">Password123!</code>
+        </p>
+      </div>
+
+      <!-- Login Form -->
+      <form id="login-form">
+        <div class="form-group">
+          <label class="form-label" for="login-email">Campus Email or Username</label>
+          <input type="text" id="login-email" class="form-control" placeholder="sanjeeviraj@skillswap.edu or sanjeeviraj" required autocomplete="username">
+        </div>
+
+        <div class="form-group">
+          <div class="flex justify-between items-center">
+            <label class="form-label" for="login-password">Password</label>
+            <a href="#" onclick="showToast('Default prototype password is Password123! or click Auto-Fill Demo above.', 'info')" style="font-size: 0.8rem;">Forgot password?</a>
+          </div>
+          <div class="input-wrapper">
+            <input type="password" id="login-password" class="form-control" placeholder="••••••••" required autocomplete="current-password">
+            <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('login-password')">
+              <i class="far fa-eye" id="login-password-eye"></i>
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-full mt-2" id="login-submit-btn">
+          <i class="fas fa-sign-in-alt"></i> Sign In to Account
+        </button>
+      </form>
+
+      <!-- Register Form -->
+      <form id="register-form" style="display: none;">
+        <div class="form-group">
+          <label class="form-label" for="reg-name">Full Name</label>
+          <input type="text" id="reg-name" class="form-control" placeholder="e.g. Sanjeeviraj" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="reg-email">College / University Email</label>
+          <input type="email" id="reg-email" class="form-control" placeholder="name@college.edu" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="reg-password">Password (min. 6 characters)</label>
+          <div class="input-wrapper">
+            <input type="password" id="reg-password" class="form-control" placeholder="Create a secure password" minlength="6" required>
+            <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('reg-password')">
+              <i class="far fa-eye" id="reg-password-eye"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="reg-confirm">Confirm Password</label>
+          <div class="input-wrapper">
+            <input type="password" id="reg-confirm" class="form-control" placeholder="Repeat your password" required>
+            <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('reg-confirm')">
+              <i class="far fa-eye" id="reg-confirm-eye"></i>
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-full mt-2" id="reg-submit-btn">
+          <i class="fas fa-user-plus"></i> Complete Registration
+        </button>
+      </form>
+
+      <!-- Lab Demo Mode Callout for Evaluators -->
+      <div class="demo-callout">
+        <span class="badge badge-cyan" style="font-size: 0.7rem;"><i class="fas fa-flask"></i> Evaluation Lab Mode</span>
+        <p style="font-size: 0.8rem; margin-top: 6px;">Test the full system instantly with pre-seeded student personas:</p>
+        <div class="demo-btn-group">
+          <button onclick="loginAsDemo('mentor')" class="btn btn-sm btn-secondary w-full" title="Log in as Developer / Lead Mentor">
+            <i class="fas fa-user-check text-cyan"></i> Sanjeeviraj (Mentor)
+          </button>
+          <button onclick="loginAsDemo('learner')" class="btn btn-sm btn-secondary w-full" title="Log in as AI / Data Science Learner">
+            <i class="fas fa-user-graduate text-violet"></i> Priya (AI Student)
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer Mount -->
+  <div id="footer-mount"></div>
+
+  <!-- Scripts -->
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/navbar.js"></script>
+  <script src="js/login.js"></script>
+</body>
+</html>

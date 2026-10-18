@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About & Architecture – SkillSwap</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <style>
+    .architecture-diagram-card {
+      background: rgba(15, 18, 29, 0.9);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      margin: 2.5rem 0;
+      box-shadow: var(--shadow-lg), 0 0 30px rgba(139, 92, 246, 0.15);
+    }
+    .formula-box {
+      background: rgba(10, 12, 20, 0.9);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1.25rem 1.5rem;
+      font-family: var(--font-mono);
+      font-size: 1rem;
+      color: var(--secondary-cyan);
+      margin: 1.25rem 0;
+      overflow-x: auto;
+    }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 2.5rem;
+      margin-top: 3rem;
+    }
+    .contact-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+    }
+    @media (max-width: 900px) {
+      .about-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body class="page-fade-in">
+  <!-- Dynamic Mount Point for Navbar -->
+  <div id="navbar-mount"></div>
+
+  <main class="container">
+    <!-- Header -->
+    <div class="text-center reveal-on-scroll" style="max-width: 800px; margin: 0 auto 3rem auto;">
+      <span class="badge badge-cyan mb-1">Prototype Development Lab Project</span>
+      <h1 style="font-size: 2.75rem; margin-bottom: 1rem;">
+        SkillSwap – Collaborative Learning Through Hybrid Recommendation
+      </h1>
+      <p style="font-size: 1.1rem; color: var(--text-secondary); line-height: 1.7;">
+        An academic engineering project demonstrating reciprocal peer education, Scikit-Learn TF-IDF semantic vectorization, and resilient full-stack service architecture.
+      </p>
+      <div class="mt-2">
+        <span class="developer-credit" style="font-size: 1rem; padding: 0.4rem 1.2rem;">
+          <i class="fas fa-user-tie"></i> Designed & Developed by: <strong>Sanjeeviraj</strong>
+        </span>
+      </div>
+    </div>
+
+    <!-- Problem Statement & Objectives -->
+    <div class="glass-card reveal-on-scroll delay-1 mb-4">
+      <div class="widget-header">
+        <h3><i class="fas fa-bullseye text-cyan"></i> Project Objective & Problem Statement</h3>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; font-size: 0.95rem; line-height: 1.7;">
+        <div>
+          <h4 style="color: #fff; margin-bottom: 0.5rem;"><i class="fas fa-exclamation-triangle text-warning"></i> The Challenge</h4>
+          <p style="color: var(--text-secondary);">
+            In academic institutions, students frequently struggle to find personalized mentorship in specialized engineering and design topics. Private tutoring services are cost-prohibitive, while traditional static forums lack structured bilateral matching where both parties mutually gain skills.
+          </p>
+        </div>
+        <div>
+          <h4 style="color: #fff; margin-bottom: 0.5rem;"><i class="fas fa-lightbulb text-cyan"></i> The SkillSwap Solution</h4>
+          <p style="color: var(--text-secondary);">
+            SkillSwap eliminates monetary barriers by creating a reciprocal skill exchange ecosystem. A student skilled in Python programming can mentor another student in exchange for learning UI/UX design or DevOps pipelines, orchestrated by an intelligent hybrid matching engine.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hybrid Recommendation Architecture Section -->
+    <div class="architecture-diagram-card reveal-on-scroll delay-2" id="architecture">
+      <div class="widget-header">
+        <h3><i class="fas fa-brain text-violet"></i> The Python Hybrid Recommendation Algorithm</h3>
+        <span class="badge badge-violet">FastAPI Microservice</span>
+      </div>
+
+      <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.7;">
+        Our recommendation engine addresses the cold-start problem and reciprocal imbalance by fusing four normalized signals into a composite compatibility score:
+      </p>
+
+      <div class="formula-box">
+        MatchScore = (0.50 &times; SkillScore) + (0.25 &times; TextSimilarity) + (0.15 &times; ScheduleOverlap) + (0.10 &times; FormatSynergy)
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.25rem; margin-top: 1.5rem;">
+        <div style="background: rgba(10, 12, 20, 0.7); padding: 1.2rem; border-radius: var(--radius-md); border-top: 3px solid var(--primary-violet);">
+          <h4 style="font-size: 1rem; color: #fff; margin-bottom: 4px;">1. Skill Compatibility (50%)</h4>
+          <p style="font-size: 0.85rem; color: var(--text-secondary);">
+            Evaluates bidirectional symmetry: whether Candidate teaches what Current User wants to learn ($A \rightarrow B$) and vice versa ($B \rightarrow A$).
+          </p>
+        </div>
+
+        <div style="background: rgba(10, 12, 20, 0.7); padding: 1.2rem; border-radius: var(--radius-md); border-top: 3px solid var(--secondary-cyan);">
+          <h4 style="font-size: 1rem; color: #fff; margin-bottom: 4px;">2. TF-IDF Text Sim (25%)</h4>
+          <p style="font-size: 0.85rem; color: var(--text-secondary);">
+            Vectorizes biography and skill goals with Scikit-Learn's <code style="color: var(--secondary-cyan);">TfidfVectorizer</code>, calculating Cosine Similarity across semantic profiles.
+          </p>
+        </div>
+
+        <div style="background: rgba(10, 12, 20, 0.7); padding: 1.2rem; border-radius: var(--radius-md); border-top: 3px solid var(--status-success);">
+          <h4 style="font-size: 1rem; color: #fff; margin-bottom: 4px;">3. Schedule Overlap (15%)</h4>
+          <p style="font-size: 0.85rem; color: var(--text-secondary);">
+            Calculates Jaccard intersection of availability time slots (weekdays evening, weekends flexible).
+          </p>
+        </div>
+
+        <div style="background: rgba(10, 12, 20, 0.7); padding: 1.2rem; border-radius: var(--radius-md); border-top: 3px solid var(--status-warning);">
+          <h4 style="font-size: 1rem; color: #fff; margin-bottom: 4px;">4. Format Synergy (10%)</h4>
+          <p style="font-size: 0.85rem; color: var(--text-secondary);">
+            Ensures session medium alignment (Online vs In-Person campus labs vs Flexible).
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Section: Tech Stack & Contact Form -->
+    <div class="about-grid" id="contact">
+      <!-- Technology Stack Specs -->
+      <div class="glass-card reveal-on-scroll delay-1">
+        <div class="widget-header">
+          <h3><i class="fas fa-layer-group text-cyan"></i> Technology Implementation</h3>
+        </div>
+        <ul style="list-style: none; display: flex; flex-direction: column; gap: 1rem; font-size: 0.9rem; color: var(--text-secondary);">
+          <li class="flex items-center gap-2">
+            <i class="fab fa-html5 text-warning" style="font-size: 1.2rem; width: 24px;"></i>
+            <div>
+              <strong style="color: #fff;">Frontend:</strong> Semantic HTML5, CSS3 Custom Properties, Vanilla JavaScript (Framework-free, 100% standard web API).
+            </div>
+          </li>
+          <li class="flex items-center gap-2">
+            <i class="fab fa-node-js text-success" style="font-size: 1.2rem; width: 24px;"></i>
+            <div>
+              <strong style="color: #fff;">Backend REST API:</strong> Node.js & Express.js with JWT authentication, HTTP-only cookies, rate limiting, and centralized error handling.
+            </div>
+          </li>
+          <li class="flex items-center gap-2">
+            <i class="fas fa-database text-cyan" style="font-size: 1.2rem; width: 24px;"></i>
+            <div>
+              <strong style="color: #fff;">Database & Models:</strong> MongoDB with Mongoose schemas, text search indexing, and referral integrity.
+            </div>
+          </li>
+          <li class="flex items-center gap-2">
+            <i class="fab fa-python text-violet" style="font-size: 1.2rem; width: 24px;"></i>
+            <div>
+              <strong style="color: #fff;">Recommendation Engine:</strong> Python FastAPI microservice, Scikit-Learn TF-IDF, Cosine Similarity, and NumPy.
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Contact Message Form -->
+      <div class="contact-card reveal-on-scroll delay-2">
+        <div class="widget-header">
+          <h3><i class="fas fa-envelope text-violet"></i> Contact & Project Inquiry</h3>
+        </div>
+        <form id="contact-form">
+          <div class="form-group">
+            <label class="form-label" for="contact-name">Your Name</label>
+            <input type="text" id="contact-name" class="form-control" placeholder="e.g. Professor or Reviewer" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="contact-email">Email Address</label>
+            <input type="email" id="contact-email" class="form-control" placeholder="name@domain.edu" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="contact-category">Subject Category</label>
+            <select id="contact-category" class="form-control">
+              <option value="Academic Project">Academic Project Review</option>
+              <option value="Feedback & Suggestions">Feedback & Suggestions</option>
+              <option value="Collaboration">Collaboration Inquiry</option>
+              <option value="General Inquiry">General Inquiry</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="contact-subject">Subject</label>
+            <input type="text" id="contact-subject" class="form-control" placeholder="Brief subject..." required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="contact-message">Message</label>
+            <textarea id="contact-message" class="form-control" rows="3" placeholder="Enter your comments or evaluation notes here..." required></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary w-full mt-2" id="contact-submit-btn">
+            <i class="fas fa-paper-plane"></i> Submit Message to MongoDB
+          </button>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer Mount -->
+  <div id="footer-mount"></div>
+
+  <!-- Scripts -->
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/navbar.js"></script>
+  <script src="js/about.js"></script>
+</body>
+</html>

@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="page-title">Sign in – Google Accounts</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      transition: background 0.3s ease;
+    }
+
+    /* Google Theme */
+    body.theme-google {
+      background: #202124;
+      color: #e8eaed;
+    }
+
+    .theme-google .auth-card {
+      width: 100%;
+      max-width: 448px;
+      background: #202124;
+      border: 1px solid #5f6368;
+      border-radius: 8px;
+      padding: 40px 40px 36px;
+    }
+
+    /* GitHub Theme */
+    body.theme-github {
+      background: #0d1117;
+      color: #c9d1d9;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    }
+
+    .theme-github .auth-card {
+      width: 100%;
+      max-width: 340px;
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      padding: 20px;
+    }
+
+    /* LinkedIn Theme */
+    body.theme-linkedin {
+      background: #000000;
+      color: #ffffff;
+      font-family: -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    .theme-linkedin .auth-card {
+      width: 100%;
+      max-width: 400px;
+      background: #1d2226;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 8px;
+      padding: 28px 24px;
+    }
+
+    /* Common Components */
+    .brand-header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .provider-logo {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .google-account-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      border: 1px solid #3c4043;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .google-account-item:hover, .google-account-item.active {
+      background: #303134;
+      border-color: #8ab4f8;
+    }
+
+    .google-account-avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .material-input-group {
+      position: relative;
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .material-input {
+      width: 100%;
+      padding: 13px 14px;
+      background: transparent;
+      border: 1px solid #5f6368;
+      border-radius: 4px;
+      color: #fff;
+      font-size: 15px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .material-input:focus {
+      border-color: #8ab4f8;
+      border-width: 2px;
+      padding: 12px 13px;
+    }
+
+    .btn-google {
+      background: #8ab4f8;
+      color: #202124;
+      font-weight: 500;
+      padding: 10px 24px;
+      border: none;
+      border-radius: 4px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.2s, box-shadow 0.2s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-google:hover {
+      background: #93bbf9;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+    }
+
+    .btn-github {
+      width: 100%;
+      background: #238636;
+      color: #fff;
+      font-weight: 600;
+      padding: 8px 16px;
+      border: 1px solid rgba(240, 246, 252, 0.1);
+      border-radius: 6px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-github:hover {
+      background: #2ea043;
+    }
+
+    .btn-linkedin {
+      width: 100%;
+      background: #0a66c2;
+      color: #fff;
+      font-weight: 600;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 28px;
+      font-size: 15px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-linkedin:hover {
+      background: #004182;
+    }
+
+    .consent-subtext {
+      font-size: 12px;
+      line-height: 1.5;
+      color: #9aa0a6;
+      margin-top: 24px;
+      text-align: left;
+    }
+
+    .consent-subtext a {
+      color: #8ab4f8;
+      text-decoration: none;
+    }
+
+    .consent-subtext a:hover {
+      text-decoration: underline;
+    }
+
+    .footer-links {
+      margin-top: 24px;
+      font-size: 12px;
+      color: #9aa0a6;
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+    }
+
+    .footer-links a {
+      color: #9aa0a6;
+      text-decoration: none;
+    }
+
+    .footer-links a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body class="theme-google" id="oauth-body">
+
+  <div class="auth-card" id="oauth-card">
+    <!-- Provider Logo & Title -->
+    <div class="brand-header" id="brand-header">
+      <!-- Injected via oauth-consent.js -->
+    </div>
+
+    <!-- Step 1: Account Selection / Credentials -->
+    <div id="step-account-selection">
+      <!-- Injected via oauth-consent.js -->
+    </div>
+
+    <!-- Step 2: Password Verification Screen (Optional/Seamless) -->
+    <div id="step-password-verification" style="display: none;">
+      <!-- Injected via oauth-consent.js -->
+    </div>
+  </div>
+
+  <div class="footer-links">
+    <a href="/login.html">Return to SkillSwap</a>
+    <span>&bull;</span>
+    <a href="#" onclick="alert('Google OAuth 2.0 Identity Protocol for SkillSwap College Lab Prototype by Sanjeeviraj'); return false;">Help</a>
+    <span>&bull;</span>
+    <a href="#" onclick="alert('Encrypted session with 256-bit token exchange.'); return false;">Privacy & Terms</a>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/oauth-consent.js"></script>
+</body>
+</html>

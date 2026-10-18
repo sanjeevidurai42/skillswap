@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard – SkillSwap</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <style>
+    .dashboard-header {
+      background: rgba(15, 18, 29, 0.7);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+    .user-profile-badge {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+    .user-avatar-lg {
+      width: 72px;
+      height: 72px;
+      border-radius: var(--radius-full);
+      border: 3px solid var(--primary-violet);
+      object-fit: cover;
+      box-shadow: 0 0 20px var(--primary-violet-glow);
+    }
+    .stats-metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.25rem;
+      margin-bottom: 2rem;
+    }
+    .metric-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      transition: all 0.25s ease;
+    }
+    .metric-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--secondary-cyan);
+      box-shadow: var(--shadow-cyan);
+    }
+    .metric-icon-box {
+      width: 50px;
+      height: 50px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+    }
+    .metric-val {
+      font-size: 1.85rem;
+      font-weight: 800;
+      font-family: var(--font-mono);
+      line-height: 1.1;
+      color: var(--text-primary);
+    }
+    .metric-label {
+      font-size: 0.825rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-top: 2px;
+    }
+    .dashboard-main-grid {
+      display: grid;
+      grid-template-columns: 1.9fr 1.1fr;
+      gap: 2rem;
+    }
+    .widget-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem;
+      margin-bottom: 2rem;
+    }
+    .widget-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .widget-header h3 {
+      font-size: 1.15rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .skill-pills-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-top: 0.5rem;
+    }
+    .skill-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.35rem 0.8rem;
+      border-radius: var(--radius-full);
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+    .partner-mini-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem;
+      background: rgba(15, 18, 29, 0.7);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      margin-bottom: 0.85rem;
+      transition: all 0.2s ease;
+    }
+    .partner-mini-card:hover {
+      border-color: var(--primary-violet);
+      background: rgba(22, 27, 43, 0.9);
+      transform: translateX(4px);
+    }
+    .session-mini-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 1rem;
+      background: rgba(15, 18, 29, 0.6);
+      border-radius: var(--radius-md);
+      border-left: 3px solid var(--secondary-cyan);
+      margin-bottom: 0.75rem;
+    }
+    .quick-actions-bar {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    @media (max-width: 992px) {
+      .stats-metrics-grid { grid-template-columns: repeat(2, 1fr); }
+      .dashboard-main-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 576px) {
+      .stats-metrics-grid { grid-template-columns: 1fr; }
+      .dashboard-header { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body class="page-fade-in">
+  <!-- Dynamic Mount Point for Navbar -->
+  <div id="navbar-mount"></div>
+
+  <main class="container">
+    <!-- Welcome Header -->
+    <div class="dashboard-header reveal-on-scroll">
+      <div class="user-profile-badge">
+        <img src="" id="dash-avatar" class="user-avatar-lg" alt="Profile">
+        <div>
+          <div class="flex items-center gap-1">
+            <h1 style="font-size: 1.85rem;" id="dash-greeting">Welcome!</h1>
+            <span class="badge badge-cyan" id="dash-badge"><i class="fas fa-check-circle"></i> Active Peer</span>
+            <span class="badge badge-violet" style="background: rgba(139, 92, 246, 0.2); border: 1px solid rgba(139, 92, 246, 0.4);"><i class="fas fa-sparkles text-cyan"></i> Gemini AI Active</span>
+          </div>
+          <p id="dash-headline" style="font-size: 0.95rem; margin-top: 4px; color: var(--text-secondary);"></p>
+        </div>
+      </div>
+
+      <div class="quick-actions-bar">
+        <a href="/partners.html" class="btn btn-primary"><i class="fas fa-user-plus"></i> Find Partner</a>
+        <button onclick="toggleAiCopilot()" class="btn btn-outline-violet"><i class="fas fa-robot text-cyan"></i> AI Copilot</button>
+        <a href="/sessions.html#schedule" class="btn btn-secondary"><i class="fas fa-calendar-plus"></i> Schedule Session</a>
+        <a href="/profile.html" class="btn btn-secondary"><i class="fas fa-user-edit"></i> Edit Skills</a>
+      </div>
+    </div>
+
+    <!-- Live Metrics Grid -->
+    <div class="stats-metrics-grid reveal-on-scroll delay-1">
+      <div class="metric-card">
+        <div class="metric-icon-box" style="background: rgba(139, 92, 246, 0.15); color: var(--primary-violet);">
+          <i class="fas fa-trophy"></i>
+        </div>
+        <div>
+          <div class="metric-val" id="metric-points">0</div>
+          <div class="metric-label">Skill Points</div>
+        </div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-icon-box" style="background: rgba(34, 211, 238, 0.15); color: var(--secondary-cyan);">
+          <i class="fas fa-star"></i>
+        </div>
+        <div>
+          <div class="metric-val" id="metric-rating">5.0★</div>
+          <div class="metric-label" id="metric-reviews">0 Reviews</div>
+        </div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-icon-box" style="background: rgba(16, 185, 129, 0.15); color: var(--status-success);">
+          <i class="fas fa-calendar-check"></i>
+        </div>
+        <div>
+          <div class="metric-val" id="metric-upcoming">0</div>
+          <div class="metric-label">Upcoming Sessions</div>
+        </div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-icon-box" style="background: rgba(245, 158, 11, 0.15); color: var(--status-warning);">
+          <i class="fas fa-hourglass-half"></i>
+        </div>
+        <div>
+          <div class="metric-val" id="metric-requests">0</div>
+          <div class="metric-label">Pending Requests</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Dashboard Two-Column Grid -->
+    <div class="dashboard-main-grid">
+      <!-- Left Column -->
+      <div>
+        <!-- AI Recommended Partners Widget -->
+        <div class="widget-card reveal-on-scroll delay-2">
+          <div class="widget-header">
+            <h3><i class="fas fa-magic text-cyan"></i> Top AI Recommended Partners</h3>
+            <a href="/partners.html" class="btn btn-sm btn-outline-violet">View All Matches <i class="fas fa-arrow-right"></i></a>
+          </div>
+          <div id="dash-partners-list">
+            <div class="skeleton" style="height: 70px; margin-bottom: 10px;"></div>
+            <div class="skeleton" style="height: 70px;"></div>
+          </div>
+        </div>
+
+        <!-- Upcoming Sessions Widget -->
+        <div class="widget-card reveal-on-scroll delay-3">
+          <div class="widget-header">
+            <h3><i class="fas fa-clock text-violet"></i> Upcoming Learning Sessions</h3>
+            <a href="/sessions.html" class="btn btn-sm btn-secondary">Manage Sessions</a>
+          </div>
+          <div id="dash-sessions-list">
+            <div class="skeleton" style="height: 80px;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column -->
+      <div>
+        <!-- My Teach & Learn Skills -->
+        <div class="widget-card reveal-on-scroll delay-2">
+          <div class="widget-header">
+            <h3><i class="fas fa-graduation-cap text-cyan"></i> My Skills Profile</h3>
+            <a href="/profile.html" class="btn btn-sm btn-secondary"><i class="fas fa-edit"></i></a>
+          </div>
+
+          <h4 style="font-size: 0.9rem; color: var(--text-cyan); margin-bottom: 0.4rem; text-transform: uppercase;">Skills I Can Teach:</h4>
+          <div class="skill-pills-wrap" id="dash-teach-skills">
+            <span class="badge badge-violet">Loading...</span>
+          </div>
+
+          <h4 style="font-size: 0.9rem; color: var(--primary-violet); margin-top: 1.25rem; margin-bottom: 0.4rem; text-transform: uppercase;">Skills I Want to Learn:</h4>
+          <div class="skill-pills-wrap" id="dash-learn-skills">
+            <span class="badge badge-cyan">Loading...</span>
+          </div>
+        </div>
+
+        <!-- Pending Exchange Requests Widget -->
+        <div class="widget-card reveal-on-scroll delay-3">
+          <div class="widget-header">
+            <h3><i class="fas fa-envelope-open-text text-violet"></i> Exchange Requests</h3>
+            <a href="/requests.html" class="btn btn-sm btn-secondary">All Requests</a>
+          </div>
+          <div id="dash-requests-list">
+            <p style="font-size: 0.875rem; color: var(--text-muted);">Checking pending requests...</p>
+          </div>
+        </div>
+
+        <!-- Transparent Points & Trust Ledger -->
+        <div class="widget-card reveal-on-scroll delay-4">
+          <div class="widget-header">
+            <h3><i class="fas fa-shield-alt text-cyan"></i> Skill Points Rules</h3>
+            <a href="/feedback.html" class="btn btn-sm btn-outline-violet">Leaderboard</a>
+          </div>
+          <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.6rem; font-size: 0.85rem; color: var(--text-secondary);">
+            <li><i class="fas fa-check text-cyan"></i> <strong>+30 Points:</strong> Completed reciprocal session</li>
+            <li><i class="fas fa-check text-cyan"></i> <strong>+20 Points:</strong> 5-star review quality bonus</li>
+            <li><i class="fas fa-check text-cyan"></i> <strong>+15 Points:</strong> Constructive peer review reward</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer Mount -->
+  <div id="footer-mount"></div>
+
+  <!-- Scripts -->
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/navbar.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>

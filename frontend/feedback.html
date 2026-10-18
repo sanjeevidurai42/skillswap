@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feedback & Skill Points – SkillSwap</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <style>
+    .feedback-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 2rem;
+    }
+    .star-rating-picker {
+      display: flex;
+      gap: 0.5rem;
+      font-size: 1.75rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      margin: 0.5rem 0 1rem;
+    }
+    .star-rating-picker i:hover,
+    .star-rating-picker i.active {
+      color: #f59e0b;
+      text-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+    }
+    .rules-card {
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.12) 0%, rgba(34, 211, 238, 0.08) 100%);
+      border: 1px solid rgba(139, 92, 246, 0.3);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem;
+      margin-bottom: 2rem;
+    }
+    .leaderboard-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.85rem 1rem;
+      background: rgba(15, 18, 29, 0.65);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      margin-bottom: 0.65rem;
+      transition: all 0.2s ease;
+    }
+    .leaderboard-row:hover {
+      border-color: var(--secondary-cyan);
+      transform: translateX(4px);
+    }
+    .rank-num {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.8rem;
+    }
+    .rank-1 { background: #f59e0b; color: #000; box-shadow: 0 0 10px rgba(245, 158, 11, 0.6); }
+    .rank-2 { background: #94a3b8; color: #000; }
+    .rank-3 { background: #b45309; color: #fff; }
+    @media (max-width: 900px) {
+      .feedback-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body class="page-fade-in">
+  <!-- Dynamic Mount Point for Navbar -->
+  <div id="navbar-mount"></div>
+
+  <main class="container">
+    <div class="reveal-on-scroll mb-3">
+      <span class="badge badge-cyan mb-1"><i class="fas fa-award"></i> Transparent Peer Merit</span>
+      <h1>Feedback & Skill Points</h1>
+      <p>Rate completed collaborative sessions, leave constructive feedback, and award skill points.</p>
+    </div>
+
+    <!-- Transparent Skill Points Rule Card -->
+    <div class="rules-card reveal-on-scroll delay-1">
+      <div class="flex items-center gap-1 mb-2">
+        <i class="fas fa-shield-alt text-cyan" style="font-size: 1.25rem;"></i>
+        <h3 style="font-size: 1.15rem; color: #fff;">Documented Skill Points System</h3>
+      </div>
+      <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1rem;">
+        SkillSwap operates on a transparent, non-inflationary merit economy designed to reward genuine collaborative learning:
+      </p>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+        <div style="background: rgba(10, 12, 20, 0.7); padding: 0.85rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+          <strong style="color: var(--secondary-cyan); display: block;">+30 Base Points</strong>
+          <span style="font-size: 0.8rem; color: var(--text-muted);">Awarded for completing any verified study session.</span>
+        </div>
+        <div style="background: rgba(10, 12, 20, 0.7); padding: 0.85rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+          <strong style="color: #f59e0b; display: block;">Up to +20 Bonus Points</strong>
+          <span style="font-size: 0.8rem; color: var(--text-muted);">Awarded to partner based on quality rating (5★ = +20, 4★ = +15, 3★ = +10).</span>
+        </div>
+        <div style="background: rgba(10, 12, 20, 0.7); padding: 0.85rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+          <strong style="color: #34d399; display: block;">+15 Reviewer Reward</strong>
+          <span style="font-size: 0.8rem; color: var(--text-muted);">Awarded to the reviewer for providing constructive feedback.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Grid: Submit Form (Left) & Leaderboard (Right) -->
+    <div class="feedback-grid">
+      <!-- Submit Feedback Form -->
+      <div class="glass-card reveal-on-scroll delay-2">
+        <div class="widget-header">
+          <h3><i class="fas fa-star text-warning" style="color: #f59e0b;"></i> Submit Session Feedback</h3>
+          <span style="font-size: 0.8rem; color: var(--text-muted);">Verified Session Only</span>
+        </div>
+
+        <form id="feedback-submission-form">
+          <div class="form-group">
+            <label class="form-label" for="fb-session-select">Select Completed Learning Session</label>
+            <select id="fb-session-select" class="form-control" required></select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Overall Rating (1 to 5 Stars)</label>
+            <div class="star-rating-picker" id="star-picker">
+              <i class="far fa-star" data-val="1"></i>
+              <i class="far fa-star" data-val="2"></i>
+              <i class="far fa-star" data-val="3"></i>
+              <i class="far fa-star" data-val="4"></i>
+              <i class="far fa-star" data-val="5"></i>
+            </div>
+            <input type="hidden" id="fb-rating-val" value="5">
+          </div>
+
+          <!-- Criteria breakdown -->
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.25rem;">
+            <div>
+              <label class="form-label" style="font-size: 0.8rem;">Clarity</label>
+              <select id="crit-clarity" class="form-control" style="padding: 0.4rem;">
+                <option value="5">5/5 - Crystal Clear</option>
+                <option value="4">4/5 - Good</option>
+                <option value="3">3/5 - Average</option>
+              </select>
+            </div>
+            <div>
+              <label class="form-label" style="font-size: 0.8rem;">Punctuality</label>
+              <select id="crit-punctuality" class="form-control" style="padding: 0.4rem;">
+                <option value="5">5/5 - On Time</option>
+                <option value="4">4/5 - Minor Delay</option>
+              </select>
+            </div>
+            <div>
+              <label class="form-label" style="font-size: 0.8rem;">Helpfulness</label>
+              <select id="crit-helpfulness" class="form-control" style="padding: 0.4rem;">
+                <option value="5">5/5 - Outstanding</option>
+                <option value="4">4/5 - Helpful</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="fb-comment-input">Constructive Peer Review</label>
+            <textarea id="fb-comment-input" class="form-control" rows="3" placeholder="Highlight what went well, concepts effectively shared, and suggestions for future collaboration..." required></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary w-full mt-2" id="fb-submit-btn">
+            <i class="fas fa-paper-plane"></i> Submit Feedback & Award Points
+          </button>
+        </form>
+      </div>
+
+      <!-- Right Column: Merit Leaderboard & My Points -->
+      <div>
+        <div class="glass-card reveal-on-scroll delay-2">
+          <div class="widget-header">
+            <h3><i class="fas fa-trophy text-cyan"></i> Peer Merit Leaderboard</h3>
+            <span class="badge badge-violet">Campus Top 10</span>
+          </div>
+          <div id="leaderboard-list">
+            <div class="skeleton" style="height: 50px; margin-bottom: 8px;"></div>
+            <div class="skeleton" style="height: 50px; margin-bottom: 8px;"></div>
+            <div class="skeleton" style="height: 50px;"></div>
+          </div>
+        </div>
+
+        <div class="glass-card reveal-on-scroll delay-3 mt-3">
+          <div class="widget-header">
+            <h3><i class="fas fa-history text-violet"></i> Reviews Received by Me</h3>
+          </div>
+          <div id="my-reviews-list">
+            <p style="font-size: 0.85rem; color: var(--text-muted); text-align: center; padding: 1rem;">
+              Loading feedback history...
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer Mount -->
+  <div id="footer-mount"></div>
+
+  <!-- Scripts -->
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/navbar.js"></script>
+  <script src="js/feedback.js"></script>
+</body>
+</html>
